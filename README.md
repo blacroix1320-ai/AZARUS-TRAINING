@@ -1,0 +1,2 @@
+# AZARUS-TRAINING
+Trading exercises
