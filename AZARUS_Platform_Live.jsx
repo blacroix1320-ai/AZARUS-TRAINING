@@ -1,12 +1,15 @@
-import { useState, useEffect, useRef } from "react";
+orm live · JSX
+Copier
 
+import { useState, useEffect, useRef } from "react";
+ 
 /* ═══════════════════════════════════════════════════════════════
    AZARUS TRAINING PLATFORM — ALL-IN-ONE
    Game 1: Les Fondations (Modules 1-4)
    Game 2: L'Exécution (Modules 5-8)
    Game 3: L'Intermédiaire (MTF, OB, Fib, Confluence)
    ═══════════════════════════════════════════════════════════════ */
-
+ 
 // ─── TRANSLATIONS ───────────────────────────────────────────────
 const L = {
   fr: {
@@ -40,6 +43,10 @@ const L = {
     ],
     selectGame: "Choisis ta formation",
     totalProgress: "Progression globale",
+    masterCert: "AZARUS PRICE ACTION — FORMATION COMPLÈTE",
+    masterCertBtn: "📜 OBTENIR MON CERTIFICAT MASTER",
+    masterDoneTitle: "FÉLICITATIONS!",
+    masterDoneMsg: "Tu as complété les 3 formations AZARUS. Tu es officiellement certifié!",
   },
   en: {
     platform: "AZARUS TRAINING PLATFORM",
@@ -72,9 +79,13 @@ const L = {
     ],
     selectGame: "Choose your training",
     totalProgress: "Overall progress",
+    masterCert: "AZARUS PRICE ACTION — COMPLETE TRAINING",
+    masterCertBtn: "📜 GET MY MASTER CERTIFICATE",
+    masterDoneTitle: "CONGRATULATIONS!",
+    masterDoneMsg: "You've completed all 3 AZARUS trainings. You are officially certified!",
   },
 };
-
+ 
 // ─── ALL QUESTIONS ──────────────────────────────────────────────
 const ALL_Q = {
   // GAME 1 — Foundations
@@ -200,15 +211,15 @@ const ALL_Q = {
     ],
   },
 };
-
+ 
 // ─── VISUAL COMPONENTS ──────────────────────────────────────────
 const Scarab=({s=50})=><svg width={s} height={s} viewBox="0 0 80 80" style={{animation:"scarabF 4s ease-in-out infinite",filter:"drop-shadow(0 0 6px rgba(34,197,94,.3))"}}><ellipse cx="40" cy="48" rx="16" ry="20" fill="url(#shA)" stroke="#15803d" strokeWidth="1.5"/><line x1="40" y1="30" x2="40" y2="66" stroke="#15803d" strokeWidth="1" opacity=".5"/><ellipse cx="40" cy="27" rx="11" ry="7" fill="#1a472a" stroke="#22c55e" strokeWidth="1.5"/><circle cx="35" cy="25" r="2" fill="#d4a017"/><circle cx="45" cy="25" r="2" fill="#d4a017"/><path d="M35 20Q31 11 27 7" stroke="#d4a017" strokeWidth="2" fill="none" strokeLinecap="round"/><path d="M45 20Q49 11 53 7" stroke="#d4a017" strokeWidth="2" fill="none" strokeLinecap="round"/><path d="M26 33Q17 29 11 23" stroke="#22c55e" strokeWidth="1.3" fill="none"/><path d="M54 33Q63 29 69 23" stroke="#22c55e" strokeWidth="1.3" fill="none"/><path d="M24 46Q15 48 9 53" stroke="#22c55e" strokeWidth="1.3" fill="none"/><path d="M56 46Q65 48 71 53" stroke="#22c55e" strokeWidth="1.3" fill="none"/><path d="M26 58Q17 64 11 71" stroke="#22c55e" strokeWidth="1.3" fill="none"/><path d="M54 58Q63 64 69 71" stroke="#22c55e" strokeWidth="1.3" fill="none"/><defs><linearGradient id="shA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#22c55e"/><stop offset="50%" stopColor="#0f5132"/><stop offset="100%" stopColor="#22c55e"/></linearGradient></defs></svg>;
 const Ring=({pct,size=60,color="#22c55e"})=>{const r=size/2-4,c=2*Math.PI*r,d=c-(pct/100)*c;return<svg width={size} height={size} style={{transform:"rotate(-90deg)"}}><circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(34,197,94,.1)" strokeWidth="4"/><circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth="4" strokeDasharray={c} strokeDashoffset={d} strokeLinecap="round" style={{transition:"stroke-dashoffset .8s ease"}}/></svg>;};
 const Candle=({type})=>{const S={marubozu:<svg viewBox="0 0 100 160" style={{width:"100%",maxWidth:80}}><defs><linearGradient id="mg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4ade80"/><stop offset="100%" stopColor="#16a34a"/></linearGradient></defs><rect x="25" y="8" width="50" height="144" rx="4" fill="url(#mg1)" style={{animation:"cGrow .7s ease-out",transformOrigin:"center bottom"}}/></svg>,pinbar:<svg viewBox="0 0 100 160" style={{width:"100%",maxWidth:80}}><line x1="50" y1="5" x2="50" y2="95" stroke="#ef4444" strokeWidth="3" opacity=".6"/><rect x="32" y="100" width="36" height="36" rx="3" fill="#ef4444" style={{animation:"cGrow .6s ease-out .2s both",transformOrigin:"center bottom"}}/><line x1="50" y1="136" x2="50" y2="152" stroke="#ef4444" strokeWidth="3" opacity=".5"/></svg>,doji:<svg viewBox="0 0 100 160" style={{width:"100%",maxWidth:80}}><line x1="50" y1="8" x2="50" y2="70" stroke="#888" strokeWidth="3"/><rect x="30" y="73" width="40" height="8" rx="3" fill="#d4a017"/><line x1="50" y1="84" x2="50" y2="152" stroke="#888" strokeWidth="3"/></svg>,engulfing:<svg viewBox="0 0 140 160" style={{width:"100%",maxWidth:120}}><rect x="10" y="45" width="28" height="50" rx="2" fill="#ef4444" opacity=".6"/><g style={{animation:"cGrow .7s ease-out .3s both",transformOrigin:"center bottom"}}><rect x="55" y="15" width="42" height="110" rx="3" fill="#22c55e"/></g></svg>,uptrend:<svg viewBox="0 0 240 120" style={{width:"100%"}}><polyline points="5,110 40,85 55,95 90,60 105,72 140,35 155,48 210,10" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" style={{strokeDasharray:400,animation:"drawL 1.5s ease-out forwards"}}/>{[[40,85,"HL"],[90,60,"HL"],[140,35,"HH"],[210,10,"HH"]].map(([x,y,l],i)=><g key={i} style={{animation:`pop .3s ease ${.3+i*.15}s both`}}><circle cx={x} cy={y} r={6} fill="#0a1a0a" stroke="#22c55e" strokeWidth="2"/><text x={x} y={y-10} textAnchor="middle" fill="#22c55e" fontSize="9" fontWeight="800">{l}</text></g>)}</svg>,downtrend:<svg viewBox="0 0 240 120" style={{width:"100%"}}><polyline points="5,10 40,30 55,20 90,55 105,42 140,80 155,68 210,108" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" style={{strokeDasharray:400,animation:"drawL 1.5s ease-out forwards"}}/>{[[40,30,"LH"],[90,55,"LH"],[140,80,"LL"],[210,108,"LL"]].map(([x,y,l],i)=><g key={i} style={{animation:`pop .3s ease ${.3+i*.15}s both`}}><circle cx={x} cy={y} r={6} fill="#0a1a0a" stroke="#ef4444" strokeWidth="2"/><text x={x} y={y-10} textAnchor="middle" fill="#ef4444" fontSize="9" fontWeight="800">{l}</text></g>)}</svg>,momentum_strong:<svg viewBox="0 0 200 120" style={{width:"100%"}}>{[{x:8,o:100,c:65,h:60,l:105},{x:55,o:65,c:30,h:25,l:70},{x:102,o:30,c:8,h:4,l:35}].map((b,i)=><g key={i} style={{animation:`cGrow .4s ease ${i*.15}s both`,transformOrigin:"center bottom"}}><line x1={b.x+20} y1={b.h} x2={b.x+20} y2={b.l} stroke="#22c55e" strokeWidth="2"/><rect x={b.x} y={Math.min(b.o,b.c)} width={40} height={Math.abs(b.o-b.c)} rx={3} fill="#22c55e" opacity=".8"/></g>)}<text x="168" y="50" fill="#22c55e" fontSize="32" fontWeight="900" style={{animation:"pop .4s ease .6s both"}}>↑</text></svg>,momentum_weak:<svg viewBox="0 0 200 120" style={{width:"100%"}}>{[{x:2,o:58,c:53},{x:32,o:53,c:50},{x:62,o:51,c:55},{x:92,o:55,c:51},{x:122,o:52,c:56},{x:152,o:54,c:51}].map((b,i)=><g key={i}><rect x={b.x} y={Math.min(b.o,b.c)} width={20} height={Math.max(5,Math.abs(b.o-b.c))} rx={2} fill={b.c<b.o?"#22c55e":"#ef4444"} opacity=".35"/></g>)}<text x="178" y="56" fill="#ef4444" fontSize="12" fontWeight="900">OFF</text></svg>,bull_flag:<svg viewBox="0 0 240 160" style={{width:"100%"}}><line x1="25" y1="145" x2="80" y2="20" stroke="#22c55e" strokeWidth="3.5" strokeLinecap="round"/><rect x="76" y="16" width="113" height="61" rx="5" fill="rgba(239,68,68,.05)"/><text x="132" y="50" textAnchor="middle" fill="#ef4444" fontSize="9" fontWeight="800">FLAG</text><line x1="185" y1="55" x2="225" y2="10" stroke="#22c55e" strokeWidth="2.5" strokeDasharray="5 3"/></svg>,bear_flag:<svg viewBox="0 0 240 160" style={{width:"100%"}}><line x1="25" y1="15" x2="80" y2="140" stroke="#ef4444" strokeWidth="3.5" strokeLinecap="round"/><rect x="76" y="83" width="113" height="61" rx="5" fill="rgba(34,197,94,.05)"/><text x="132" y="118" textAnchor="middle" fill="#22c55e" fontSize="9" fontWeight="800">FLAG</text><line x1="185" y1="105" x2="225" y2="150" stroke="#ef4444" strokeWidth="2.5" strokeDasharray="5 3"/></svg>};return S[type]?<div style={{display:"flex",justifyContent:"center",padding:"12px 0"}}>{S[type]}</div>:null;};
-
+ 
 // ─── CERTIFICATE ────────────────────────────────────────────────
 const Cert=({name,score,lang,stats,course})=>{const t=L[lang];const ref=useRef(null);const date=new Date().toLocaleDateString(lang==="fr"?"fr-CA":"en-US",{year:"numeric",month:"long",day:"numeric"});const dl=()=>{const cv=ref.current;if(!cv)return;const ctx=cv.getContext("2d");const w=1200,h=850;cv.width=w;cv.height=h;const bg=ctx.createLinearGradient(0,0,w,h);bg.addColorStop(0,"#020d02");bg.addColorStop(.5,"#0d2818");bg.addColorStop(1,"#051a0a");ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);ctx.strokeStyle="#22c55e";ctx.lineWidth=3;ctx.strokeRect(30,30,w-60,h-60);ctx.strokeStyle="rgba(34,197,94,.3)";ctx.lineWidth=1;ctx.strokeRect(40,40,w-80,h-80);ctx.fillStyle="#22c55e";ctx.font="bold 18px sans-serif";ctx.textAlign="center";ctx.fillText("AZARUS",w/2,100);ctx.fillStyle="#2d5a3d";ctx.font="10px sans-serif";ctx.fillText("TRADING ACADEMY",w/2,118);ctx.fillStyle="#d4a017";ctx.font="bold 36px sans-serif";ctx.fillText(t.certTitle,w/2,190);ctx.fillStyle="#6a9a7a";ctx.font="16px sans-serif";ctx.fillText(t.certSub,w/2,240);ctx.fillStyle="#fff";ctx.font="bold 42px sans-serif";ctx.fillText(name||"___",w/2,310);ctx.fillStyle="#22c55e";ctx.font="bold 22px sans-serif";ctx.fillText(course,w/2,380);ctx.fillStyle="#4a7a5a";ctx.font="16px sans-serif";ctx.fillText(`${t.score}: ${score}% | ${stats.c}/${stats.t} ${t.correct2}`,w/2,430);ctx.fillStyle="#6a9a7a";ctx.font="14px sans-serif";ctx.fillText(date,w/2,490);ctx.fillStyle="#2d5a3d";ctx.font="12px sans-serif";ctx.fillText(t.certBy,w/2,530);ctx.strokeStyle="rgba(34,197,94,.2)";ctx.beginPath();ctx.moveTo(w/2-120,600);ctx.lineTo(w/2+120,600);ctx.stroke();ctx.fillStyle="#4a7a5a";ctx.font="12px sans-serif";ctx.fillText("Billy Lacroix — AZARUS",w/2,620);const a=document.createElement("a");a.download=`AZARUS_${(name||"student").replace(/\s/g,"_")}.png`;a.href=cv.toDataURL("image/png");a.click();};return<div><canvas ref={ref} style={{display:"none"}}/><button onClick={dl} className="az-btn" style={{width:"100%",marginTop:16}}>📜 {t.download}</button></div>;};
-
+ 
 // ─── MAIN APP ───────────────────────────────────────────────────
 export default function AzarusPlatform() {
   const [lang,setLang]=useState("fr");
@@ -230,7 +241,7 @@ export default function AzarusPlatform() {
   const initProg=()=>({1:{c:0,t:0,done:false},2:{c:0,t:0,done:false},3:{c:0,t:0,done:false},4:{c:0,t:0,done:false}});
   const [progress,setProgress]=useState([initProg(),initProg(),initProg()]);
   const [unlocked,setUnlocked]=useState([[1],[1],[1]]);
-
+ 
   const t=L[lang];const gInfo=t.games[gIdx];
   const qs=(ALL_Q[gIdx]||{})[lv]||[];const q=qs[qi];
   const gProg=progress[gIdx];
@@ -244,34 +255,35 @@ export default function AzarusPlatform() {
   const globalT=progress.reduce((a,g)=>a+Object.values(g).reduce((b,p)=>b+p.t,0),0);
   const globalPct=globalT>0?Math.round(globalC/globalT*100):0;
   const globalDone=progress.reduce((a,g)=>a+Object.values(g).filter(p=>p.done).length,0);
-
+  const allComplete=globalDone===12;
+ 
   const go=cb=>{setTrans(true);setTimeout(()=>{cb();setTrans(false);},300);};
   const doOk=()=>{const b=str>=4?25:str>=2?15:10;setBAmt(b);setStr(s=>{const n=s+1;if(n>bStr)setBStr(n);return n;});setBurst(true);setTimeout(()=>setBurst(false),900);};
   const doFail=()=>{setStr(0);setLives(l=>Math.max(0,l-1));setShake(true);setTimeout(()=>setShake(false),500);};
-
+ 
   const answer=(i)=>{if(show)return;setSel(i);setShow(true);const c=q[lang].c===i;setOk(c);
     setProgress(p=>{const n=[...p];n[gIdx]={...n[gIdx],[lv]:{...n[gIdx][lv],c:n[gIdx][lv].c+(c?1:0),t:n[gIdx][lv].t+1}};return n;});
     if(c)doOk();else doFail();};
   const answerBool=(v)=>{if(show)return;setSel(v);setShow(true);const c=q[lang].c===v;setOk(c);
     setProgress(p=>{const n=[...p];n[gIdx]={...n[gIdx],[lv]:{...n[gIdx][lv],c:n[gIdx][lv].c+(c?1:0),t:n[gIdx][lv].t+1}};return n;});
     if(c)doOk();else doFail();};
-
+ 
   const next=()=>{if(qi+1>=qs.length){
     setProgress(p=>{const n=[...p];n[gIdx]={...n[gIdx],[lv]:{...n[gIdx][lv],done:true}};return n;});
     if(lv<4){const u=[...unlocked];if(!u[gIdx].includes(lv+1)){u[gIdx]=[...u[gIdx],lv+1];setUnlocked(u);}}
     go(()=>setPage(lv>=4?"cert":"win"));}
     else{setQi(i=>i+1);setSel(null);setShow(false);}};
-
+ 
   const startLvl=l=>{go(()=>{setLv(l);setQi(0);setSel(null);setShow(false);setStr(0);setLives(3);setPage("game");});};
   const openGame=g=>{go(()=>{setGIdx(g);setPage("menu");});};
-
+ 
   return<div style={{minHeight:"100dvh",background:"linear-gradient(170deg,#020d02,#0a1a0a 30%,#0d2818 60%,#051a0a)",color:"#e8e8e8",fontFamily:"system-ui,-apple-system,sans-serif",position:"relative",overflow:"hidden"}}>
     <style>{`*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}@keyframes floatUp{0%{transform:translateY(0);opacity:.15}100%{transform:translateY(-105vh);opacity:0}}@keyframes scarabF{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}@keyframes slideL{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}@keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}@keyframes cGrow{from{opacity:0;transform:scaleY(0)}to{opacity:1;transform:scaleY(1)}}@keyframes drawL{from{stroke-dashoffset:400}to{stroke-dashoffset:0}}@keyframes shakeX{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}@keyframes xpF{0%{opacity:1;transform:translate(-50%,-50%) scale(.6)}40%{transform:translate(-50%,-65%) scale(1.3)}100%{opacity:0;transform:translate(-50%,-90%) scale(.8)}}@keyframes scrF{0%{opacity:1}50%{opacity:0}100%{opacity:1}}@keyframes trophy{0%{transform:scale(0) rotate(-15deg)}60%{transform:scale(1.15) rotate(3deg)}100%{transform:scale(1) rotate(0)}}@keyframes fire{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}.az-btn{border:2px solid #22c55e;background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.04));color:#22c55e;padding:14px 24px;border-radius:14px;font-weight:800;font-size:14px;cursor:pointer;transition:all .3s;text-transform:uppercase;letter-spacing:2px;width:100%;text-align:center}.az-btn:active{transform:scale(.97);background:#22c55e;color:#020d02}.opt{border:2px solid rgba(34,197,94,.12);background:rgba(34,197,94,.02);color:#bbb;padding:14px 16px;border-radius:14px;cursor:pointer;transition:all .3s;text-align:left;font-size:14px;width:100%;display:flex;align-items:center;gap:12px}.opt:active{background:rgba(34,197,94,.08);transform:scale(.98)}.opt-c{border-color:#22c55e!important;background:rgba(34,197,94,.1)!important;color:#22c55e!important}.opt-w{border-color:#ef4444!important;background:rgba(239,68,68,.08)!important;color:#ef4444!important}.lc{border:2px solid rgba(34,197,94,.1);background:rgba(34,197,94,.015);border-radius:18px;padding:16px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}.lc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(34,197,94,.2),transparent);background-size:200%;animation:shimmer 4s linear infinite}.lc:active{transform:scale(.98);border-color:#22c55e}.lc.lk{opacity:.3;pointer-events:none}.tf{flex:1;padding:16px;border-radius:14px;cursor:pointer;font-size:16px;font-weight:900;text-align:center;border:2px solid;transition:all .3s}.tf:active{transform:scale(.96)}.scbox{background:linear-gradient(135deg,rgba(34,197,94,.04),rgba(212,160,23,.02));border:1px solid rgba(34,197,94,.1);border-radius:16px;padding:16px;margin-bottom:16px}.gc{border:2px solid rgba(34,197,94,.1);background:linear-gradient(135deg,rgba(34,197,94,.02),rgba(34,197,94,.005));border-radius:20px;padding:20px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}.gc:active{transform:scale(.98);border-color:#22c55e}.gc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(34,197,94,.3),transparent);background-size:200%;animation:shimmer 3s linear infinite}`}</style>
     {/* Particles */}
     <div style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:0,overflow:"hidden"}}>{Array.from({length:25}).map((_,i)=><div key={i} style={{position:"absolute",left:`${(i*4.1)%100}%`,bottom:"-2%",width:1.5+i%4*1.5,height:1.5+i%4*1.5,borderRadius:"50%",background:i%3===0?"#22c55e":i%3===1?"#d4a017":"#15803d",opacity:.05+i%5*.03,animation:`floatUp ${10+i%8*3}s linear infinite`,animationDelay:`${i*.5}s`}}/>)}</div>
     {trans&&<div style={{position:"fixed",inset:0,background:"#020d02",zIndex:998,animation:"scrF .6s ease"}}/>}
     {burst&&<div style={{position:"fixed",top:"40%",left:"50%",pointerEvents:"none",zIndex:999}}><div style={{animation:"xpF .9s ease-out forwards",color:"#4ade80",fontSize:38,fontWeight:900,textShadow:"0 0 30px rgba(34,197,94,.8)"}}>+{bAmt}</div></div>}
-
+ 
     {/* HEADER */}
     <header style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 16px",borderBottom:"1px solid rgba(34,197,94,.06)",background:"rgba(2,13,2,.9)",backdropFilter:"blur(16px)",position:"sticky",top:0,zIndex:20}}>
       <div style={{display:"flex",alignItems:"center",gap:8,cursor:"pointer"}} onClick={()=>go(()=>setPage("home"))}>
@@ -284,7 +296,7 @@ export default function AzarusPlatform() {
         <button onClick={()=>setLang(lang==="fr"?"en":"fr")} style={{background:"rgba(34,197,94,.08)",border:"1px solid rgba(34,197,94,.15)",color:"#22c55e",padding:"3px 9px",borderRadius:5,cursor:"pointer",fontWeight:800,fontSize:10,letterSpacing:2}}>{t.lang}</button>
       </div>
     </header>
-
+ 
     {/* ═══ HOME ═══ */}
     {page==="home"&&<div style={{padding:"24px 16px 40px",maxWidth:440,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:28,animation:"fadeUp .5s ease"}}><Scarab s={80}/><h1 style={{color:"#22c55e",fontSize:22,fontWeight:900,letterSpacing:4,margin:"16px 0 6px"}}>{t.platform}</h1><p style={{color:"#3a6b4a",fontSize:11,letterSpacing:2}}>{t.selectGame}</p><div style={{width:50,height:2,margin:"12px auto",background:"linear-gradient(90deg,transparent,#22c55e,transparent)"}}/></div>
@@ -313,8 +325,13 @@ export default function AzarusPlatform() {
             </div>
           </div>;})}
       </div>
+      {/* Master certificate button - only when ALL 12 levels complete */}
+      {allComplete&&<div style={{marginTop:20,animation:"fadeUp .5s ease .4s both"}}>
+        <div style={{textAlign:"center",marginBottom:12}}><span style={{fontSize:28}}>🏆</span><h3 style={{color:"#d4a017",fontSize:16,fontWeight:900,letterSpacing:2,margin:"6px 0 2px"}}>{t.masterDoneTitle}</h3><p style={{color:"#6a9a7a",fontSize:11}}>{t.masterDoneMsg}</p></div>
+        <button className="az-btn" onClick={()=>go(()=>setPage("cert"))} style={{borderColor:"#d4a017",color:"#d4a017",background:"linear-gradient(135deg,rgba(212,160,23,.15),rgba(34,197,94,.08))",fontSize:13}}>{t.masterCertBtn}</button>
+      </div>}
     </div>}
-
+ 
     {/* ═══ GAME MENU ═══ */}
     {page==="menu"&&<div style={{padding:"20px 16px 40px",maxWidth:440,margin:"0 auto"}}>
       <button onClick={()=>go(()=>setPage("home"))} style={{background:"none",border:"none",color:"#3a6b4a",cursor:"pointer",fontSize:12,marginBottom:12,padding:0}}>{t.backHome}</button>
@@ -336,10 +353,9 @@ export default function AzarusPlatform() {
             </div>
           </div>;})}
       </div>
-      {gAllDone&&<button className="az-btn" onClick={()=>go(()=>setPage("cert"))} style={{marginTop:16,borderColor:"#d4a017",color:"#d4a017"}}>📜 {t.certTitle}</button>}
       {gTotalQ>0&&<button onClick={()=>{if(confirm(lang==="fr"?"Réinitialiser?":"Reset?")){setProgress(p=>{const n=[...p];n[gIdx]=initProg();return n;});setUnlocked(u=>{const n=[...u];n[gIdx]=[1];return n;});}}} style={{marginTop:10,background:"none",border:"1px solid rgba(239,68,68,.15)",color:"#ef4444",padding:8,borderRadius:8,cursor:"pointer",fontSize:10,width:"100%",opacity:.5}}>{t.resetAll}</button>}
     </div>}
-
+ 
     {/* ═══ GAME ═══ */}
     {page==="game"&&q&&<div style={{padding:"16px",maxWidth:440,margin:"0 auto",animation:shake?"shakeX .5s ease":"fadeUp .3s ease"}}>
       <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:16}}>
@@ -358,13 +374,54 @@ export default function AzarusPlatform() {
       {q.t==="ck"&&show&&<div style={{display:"flex",gap:10,marginTop:12}}><div style={{flex:1,padding:12,borderRadius:12,textAlign:"center",fontWeight:700,border:`2px solid ${q[lang].c===true?"#22c55e":sel===true?"#ef4444":"#333"}`,color:q[lang].c===true?"#22c55e":"#444"}}>{t.yes}</div><div style={{flex:1,padding:12,borderRadius:12,textAlign:"center",fontWeight:700,border:`2px solid ${q[lang].c===false?"#22c55e":sel===false?"#ef4444":"#333"}`,color:q[lang].c===false?"#22c55e":"#444"}}>{t.no}</div></div>}
       {show&&<div style={{marginTop:14,padding:14,borderRadius:14,background:ok?"rgba(34,197,94,.06)":"rgba(239,68,68,.06)",border:`1px solid ${ok?"rgba(34,197,94,.15)":"rgba(239,68,68,.15)"}`,animation:"fadeUp .25s ease"}}><div style={{fontWeight:900,fontSize:15,color:ok?"#22c55e":"#ef4444",display:"flex",alignItems:"center",gap:6,marginBottom:4}}><span style={{fontSize:18}}>{ok?"✦":"✗"}</span>{ok?t.correct:t.wrong}{ok&&<span style={{fontSize:11,opacity:.6,marginLeft:"auto"}}>+{bAmt}</span>}</div><p style={{color:"#6a9a7a",fontSize:12,lineHeight:1.5,margin:"0 0 12px"}}>{q[lang].e}</p><button className="az-btn" onClick={next}>{qi+1>=qs.length?t.nextLvl:t.next} →</button></div>}
     </div>}
-
+ 
     {/* ═══ WIN ═══ */}
-    {page==="win"&&<div style={{padding:"40px 16px",maxWidth:400,margin:"0 auto",textAlign:"center"}}><div style={{width:80,height:80,borderRadius:"50%",margin:"0 auto 20px",background:"linear-gradient(135deg,#22c55e,#4ade80)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:36,animation:"trophy .7s cubic-bezier(.34,1.56,.64,1)",boxShadow:"0 0 40px rgba(34,197,94,.3)"}}>🏆</div><h2 style={{color:"#22c55e",fontSize:22,fontWeight:900}}>{t.complete}</h2><p style={{color:"#4a7a5a",margin:"6px 0 24px"}}>{gInfo.lvl[lv-1]}</p><div style={{display:"flex",justifyContent:"space-around",padding:20,background:"rgba(0,0,0,.3)",borderRadius:18,marginBottom:24}}><div><div style={{color:"#22c55e",fontSize:28,fontWeight:900}}>{lvlPct(gIdx,lv)}%</div><div style={{color:"#3a6b4a",fontSize:10}}>{t.accuracy}</div></div><div style={{width:1,background:"rgba(34,197,94,.1)"}}/><div><div style={{color:"#4ade80",fontSize:28,fontWeight:900}}>{progress[gIdx][lv].c}/{progress[gIdx][lv].t}</div><div style={{color:"#3a6b4a",fontSize:10}}>{t.correct2}</div></div></div><div style={{display:"flex",flexDirection:"column",gap:10}}>{lv<4&&<button className="az-btn" onClick={()=>startLvl(lv+1)}>{t.nextLvl} →</button>}{gAllDone&&<button className="az-btn" onClick={()=>go(()=>setPage("cert"))} style={{borderColor:"#d4a017",color:"#d4a017"}}>📜 {t.certTitle}</button>}<button onClick={()=>go(()=>setPage("menu"))} style={{background:"none",border:"1px solid rgba(34,197,94,.06)",color:"#3a6b4a",padding:10,borderRadius:10,cursor:"pointer",fontSize:12}}>{t.backMenu}</button></div></div>}
-
-    {/* ═══ CERT ═══ */}
-    {page==="cert"&&<div style={{padding:"30px 16px",maxWidth:440,margin:"0 auto",textAlign:"center"}}><Scarab s={60}/><h2 style={{color:"#d4a017",fontSize:20,fontWeight:900,letterSpacing:3,margin:"12px 0"}}>{t.certTitle}</h2><div style={{background:"linear-gradient(135deg,rgba(34,197,94,.04),rgba(212,160,23,.03))",border:"2px solid rgba(34,197,94,.12)",borderRadius:20,padding:20,margin:"16px 0"}}><div style={{color:"#22c55e",fontSize:10,letterSpacing:3,marginBottom:10}}>AZARUS TRADING ACADEMY</div><div style={{color:"#6a9a7a",fontSize:11,marginBottom:4}}>{t.certSub}</div><div style={{color:"#fff",fontSize:22,fontWeight:900,margin:"10px 0"}}>{certName||"..."}</div><div style={{color:"#22c55e",fontSize:13,fontWeight:700,marginBottom:8}}>{gInfo.cert}</div><div style={{display:"flex",justifyContent:"center",gap:14,fontSize:12}}><span style={{color:"#4ade80",fontWeight:800}}>{gPct}%</span><span style={{color:"#3a6b4a"}}>•</span><span style={{color:"#4ade80",fontWeight:800}}>{gTotalC}/{gTotalQ}</span><span style={{color:"#3a6b4a"}}>•</span><span style={{color:"#d4a017",fontWeight:800}}>{t.passed}</span></div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6,marginTop:12}}>{[0,1,2,3].map(i=><div key={i} style={{background:"rgba(0,0,0,.2)",borderRadius:8,padding:6,fontSize:9}}><div style={{color:"#22c55e",fontWeight:700}}>{gInfo.lvlIcons[i]} {gInfo.lvl[i]}</div><div style={{color:"#4a7a5a",marginTop:2}}>{lvlPct(gIdx,i+1)}%</div></div>)}</div></div><div style={{marginBottom:14}}><label style={{color:"#4a7a5a",fontSize:11,display:"block",marginBottom:6}}>{t.getName}</label><input value={certName} onChange={e=>setCertName(e.target.value)} placeholder={t.namePh} style={{width:"100%",padding:12,borderRadius:12,border:"2px solid rgba(34,197,94,.15)",background:"rgba(34,197,94,.03)",color:"#fff",fontSize:16,fontWeight:700,textAlign:"center",outline:"none"}}/></div><Cert name={certName} score={gPct} lang={lang} stats={{c:gTotalC,t:gTotalQ}} course={gInfo.cert}/><button onClick={()=>go(()=>setPage("menu"))} style={{background:"none",border:"1px solid rgba(34,197,94,.06)",color:"#3a6b4a",padding:8,borderRadius:8,cursor:"pointer",fontSize:11,width:"100%",marginTop:10}}>{t.backMenu}</button></div>}
-
+    {page==="win"&&<div style={{padding:"40px 16px",maxWidth:400,margin:"0 auto",textAlign:"center"}}><div style={{width:80,height:80,borderRadius:"50%",margin:"0 auto 20px",background:"linear-gradient(135deg,#22c55e,#4ade80)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:36,animation:"trophy .7s cubic-bezier(.34,1.56,.64,1)",boxShadow:"0 0 40px rgba(34,197,94,.3)"}}>🏆</div><h2 style={{color:"#22c55e",fontSize:22,fontWeight:900}}>{t.complete}</h2><p style={{color:"#4a7a5a",margin:"6px 0 24px"}}>{gInfo.lvl[lv-1]}</p><div style={{display:"flex",justifyContent:"space-around",padding:20,background:"rgba(0,0,0,.3)",borderRadius:18,marginBottom:24}}><div><div style={{color:"#22c55e",fontSize:28,fontWeight:900}}>{lvlPct(gIdx,lv)}%</div><div style={{color:"#3a6b4a",fontSize:10}}>{t.accuracy}</div></div><div style={{width:1,background:"rgba(34,197,94,.1)"}}/><div><div style={{color:"#4ade80",fontSize:28,fontWeight:900}}>{progress[gIdx][lv].c}/{progress[gIdx][lv].t}</div><div style={{color:"#3a6b4a",fontSize:10}}>{t.correct2}</div></div></div><div style={{display:"flex",flexDirection:"column",gap:10}}>{lv<4&&<button className="az-btn" onClick={()=>startLvl(lv+1)}>{t.nextLvl} →</button>}{allComplete&&<button className="az-btn" onClick={()=>go(()=>setPage("cert"))} style={{borderColor:"#d4a017",color:"#d4a017",background:"linear-gradient(135deg,rgba(212,160,23,.15),rgba(34,197,94,.08))"}}>{t.masterCertBtn}</button>}<button onClick={()=>go(()=>setPage("menu"))} style={{background:"none",border:"1px solid rgba(34,197,94,.06)",color:"#3a6b4a",padding:10,borderRadius:10,cursor:"pointer",fontSize:12}}>{t.backMenu}</button></div></div>}
+ 
+    {/* ═══ MASTER CERT ═══ */}
+    {page==="cert"&&<div style={{padding:"30px 16px",maxWidth:440,margin:"0 auto",textAlign:"center"}}>
+      <Scarab s={70}/>
+      <h2 style={{color:"#d4a017",fontSize:20,fontWeight:900,letterSpacing:3,margin:"12px 0"}}>{t.certTitle}</h2>
+      {/* Preview card */}
+      <div style={{background:"linear-gradient(135deg,rgba(34,197,94,.04),rgba(212,160,23,.03))",border:"2px solid rgba(212,160,23,.15)",borderRadius:20,padding:20,margin:"16px 0"}}>
+        <div style={{color:"#d4a017",fontSize:10,letterSpacing:3,marginBottom:10}}>AZARUS TRADING ACADEMY</div>
+        <div style={{color:"#6a9a7a",fontSize:11,marginBottom:4}}>{t.certSub}</div>
+        <div style={{color:"#fff",fontSize:22,fontWeight:900,margin:"10px 0"}}>{certName||"..."}</div>
+        <div style={{color:"#d4a017",fontSize:13,fontWeight:700,marginBottom:8}}>{t.masterCert}</div>
+        <div style={{display:"flex",justifyContent:"center",gap:14,fontSize:12}}>
+          <span style={{color:"#4ade80",fontWeight:800}}>{globalPct}%</span>
+          <span style={{color:"#3a6b4a"}}>•</span>
+          <span style={{color:"#4ade80",fontWeight:800}}>{globalC}/{globalT}</span>
+          <span style={{color:"#3a6b4a"}}>•</span>
+          <span style={{color:"#d4a017",fontWeight:800}}>{t.passed}</span>
+        </div>
+        {/* All 3 games breakdown */}
+        <div style={{display:"flex",flexDirection:"column",gap:8,marginTop:14}}>
+          {t.games.map((g,gi)=>{const gp=progress[gi];const gc=Object.values(gp).reduce((a,p)=>a+p.c,0);const gt=Object.values(gp).reduce((a,p)=>a+p.t,0);const gpct=gt>0?Math.round(gc/gt*100):0;
+            return<div key={gi} style={{background:"rgba(0,0,0,.2)",borderRadius:12,padding:10}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+                <span style={{color:"#22c55e",fontWeight:800,fontSize:11}}>{g.icon} {g.title}</span>
+                <span style={{color:"#d4a017",fontWeight:800,fontSize:12}}>{gpct}%</span>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:4}}>
+                {[0,1,2,3].map(i=><div key={i} style={{background:"rgba(34,197,94,.06)",borderRadius:6,padding:"3px 0",textAlign:"center"}}>
+                  <div style={{fontSize:10}}>{g.lvlIcons[i]}</div>
+                  <div style={{color:"#4a7a5a",fontSize:8,fontWeight:700}}>{lvlPct(gi,i+1)}%</div>
+                </div>)}
+              </div>
+            </div>;})}
+        </div>
+      </div>
+      {/* Name input */}
+      <div style={{marginBottom:14}}>
+        <label style={{color:"#4a7a5a",fontSize:11,display:"block",marginBottom:6}}>{t.getName}</label>
+        <input value={certName} onChange={e=>setCertName(e.target.value)} placeholder={t.namePh} style={{width:"100%",padding:12,borderRadius:12,border:"2px solid rgba(212,160,23,.2)",background:"rgba(212,160,23,.03)",color:"#fff",fontSize:16,fontWeight:700,textAlign:"center",outline:"none"}}/>
+      </div>
+      <Cert name={certName} score={globalPct} lang={lang} stats={{c:globalC,t:globalT}} course={t.masterCert}/>
+      <button onClick={()=>go(()=>setPage("home"))} style={{background:"none",border:"1px solid rgba(34,197,94,.06)",color:"#3a6b4a",padding:8,borderRadius:8,cursor:"pointer",fontSize:11,width:"100%",marginTop:10}}>{t.backHome}</button>
+    </div>}
+ 
     <div style={{textAlign:"center",padding:"30px 16px 16px"}}><span style={{color:"rgba(34,197,94,.1)",fontSize:8,letterSpacing:3}}>AZARUS © 2025 — azarus.xyz</span></div>
   </div>;
 }
+ 
